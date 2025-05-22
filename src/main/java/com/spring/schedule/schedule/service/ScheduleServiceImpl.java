@@ -3,10 +3,8 @@ package com.spring.schedule.schedule.service;
 import com.spring.schedule.schedule.dto.*;
 import com.spring.schedule.schedule.entity.Schedule;
 import com.spring.schedule.schedule.repository.ScheduleRepository;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +31,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     //일정 전체 조회
-    public List<FindScheduleResponseDto> getScheduleList(LocalDate updatedDate, String name) {
-        final List<Schedule> scheduleList = scheduleRepository.findAll();
+    public List<FindScheduleResponseDto> findAllSchedules() {
+        List<FindScheduleResponseDto> responseDtoList = new ArrayList<>();
+        List<Schedule> scheduleList = scheduleRepository.findAll();
+        for(Schedule schedule : scheduleList) {
+            responseDtoList.add(new FindScheduleResponseDto(schedule));
+        }
+        return responseDtoList;
 
 
 
@@ -54,7 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     //일정 삭제
     @Override
-    public void deleteSchedule(Long id, DeleteScheduleRequestDto requestDto) {
+    public void deleteSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Schedule not found"));
         scheduleRepository.delete(schedule);
