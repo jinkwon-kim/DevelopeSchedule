@@ -1,8 +1,6 @@
 package com.spring.schedule.schedule.user.controller;
-
-import com.spring.schedule.schedule.user.dto.CreateUserRequestDto;
-import com.spring.schedule.schedule.user.dto.CreateUserResposeDto;
-import com.spring.schedule.schedule.user.dto.FindUserResponseDto;
+import java.util.List;
+import com.spring.schedule.schedule.user.dto.*;
 import com.spring.schedule.schedule.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +21,32 @@ public class UserController {
         return new ResponseEntity<>(createUserResposeDto, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<FindUserResponseDto> findUser(@PathVariable Long id) {
-        FindUserResponseDto userResponseDto = userService.findUserById(id);
+    @GetMapping("/userId")
+    public ResponseEntity<FindUserResponseDto> findUser(@PathVariable Long userid) {
+        FindUserResponseDto userResponseDto = userService.findUserById(userid);
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
 
-    @PatchMapping("/{UserId}")
+
+    }
+    @GetMapping
+    public ResponseEntity<List<FindUserResponseDto>> findAllUsers() {
+        List<FindUserResponseDto> responseDtoList = userService.findAllUsers();
+        return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
+    }
+    @PatchMapping("/{userId}")
     public ResponseEntity<UpdateUserResponseDto> updateUser(
-            @PathVariable Long id,
+            @PathVariable Long userid,
             @RequestBody UpdateUserRequestDto requestDto
-                )        {
-        UpdateUserResponseDto updateUserResponseDto = userService.updateUser(id, requestDto);
+    )        {
+        UpdateUserResponseDto updateUserResponseDto = userService.updateUser(userid, requestDto);
 
         return new ResponseEntity<>(updateUserResponseDto,HttpStatus.OK);
-        }
+    }
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userid) {
+        userService.deleteUser(userid);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

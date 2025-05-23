@@ -5,6 +5,9 @@ import com.spring.schedule.schedule.user.entity.User;
 import com.spring.schedule.schedule.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
@@ -21,14 +24,23 @@ public class UserServiceImpl implements UserService{
         return new CreateUserResposeDto(saveUser);
     }
     @Override
-    public FindUserResponseDto findUserById(Long id) {
-        User user = userRepository.findByIdOrElseThrow(id);
+    public FindUserResponseDto findUserById(Long userid) {
+        User user = userRepository.findByIdOrElseThrow(userid);
 
         return new FindUserResponseDto(user);
     }
     @Override
-    public UpdateUserResponseDto updateUser(Long id, UpdateUserRequestDto requestDto) {
-        User user = userRepository.findByIdOrElseThrow(id);
+    public List<FindUserResponseDto> findAllUsers() {
+        List<FindUserResponseDto> responseDtoList = new ArrayList<>();
+        List<User> userList = userRepository.findAll();
+        for(User user : userList) {
+            responseDtoList.add(new FindUserResponseDto(user));
+        }
+        return responseDtoList;
+    }
+    @Override
+    public UpdateUserResponseDto updateUser(Long userid, UpdateUserRequestDto requestDto) {
+        User user = userRepository.findByIdOrElseThrow(userid);
         if (requestDto.getUserName() != null) {
             user.updateUserName(requestDto.getUserName());
         }
@@ -37,5 +49,11 @@ public class UserServiceImpl implements UserService{
         }
 
         return new UpdateUserResponseDto(user);
+    }
+    @Override
+    public void deleteUser(Long userid) {
+        User user = userRepository.findByIdOrElseThrow(userid);
+
+        userRepository.delete(user);
     }
 }

@@ -45,8 +45,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     //일정 수정
     @Override
-    public UpdateScheduleResponseDto updateSchedule(Long id, UpdateScheduleRequestDto requestDto) {
-        Schedule schedule = scheduleRepository.findById(id)
+    public UpdateScheduleResponseDto updateSchedule(Long Scheduleid, UpdateScheduleRequestDto requestDto) {
+        Schedule schedule = scheduleRepository.findById(Scheduleid)
                 .orElseThrow(() -> new RuntimeException("Schedule not found"));
         schedule.updateTitle(requestDto.getName());
 
@@ -57,8 +57,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     //일정 삭제
     @Override
-    public void deleteSchedule(Long id) {
-        Schedule schedule = scheduleRepository.findById(id)
+    public void deleteSchedule(Long Scheduleid) {
+        Schedule schedule = scheduleRepository.findById(Scheduleid)
                 .orElseThrow(() -> new RuntimeException("Schedule not found"));
         scheduleRepository.delete(schedule);
     }
